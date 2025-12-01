@@ -8,566 +8,467 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         :root {
-            --color-1: #E0BBE4;
-            --color-2: #957DAD;
-            --color-3: #D291BC;
-            --color-4: #FEC8D8;
-            --color-5: #FFDFD3;
-            --shadow-1: 0 2px 4px rgba(149, 125, 173, 0.1);
-            --shadow-2: 0 4px 8px rgba(149, 125, 173, 0.15);
-            --shadow-3: 0 8px 16px rgba(149, 125, 173, 0.2);
+            /* Theme colors from UI-instructions.txt */
+            --brand: #C04B4B;    /* primary */
+            --warm-1: #E09B5E;   /* secondary */
+            --warm-2: #F1D27B;   /* accent */
+            --deep: #613A2B;     /* dark */
+            --teal: #498779;     /* accent-2 */
+
+            /* neutrals */
+            --bg: #F4F6F8;
+            --panel: #FFFFFF;
+            --muted: #6B7280;
+            --border: #E6E9EE;
+            --glass: rgba(255,255,255,0.85);
+
+            /* shadows */
+            --shadow-soft: 0 6px 18px rgba(18, 25, 30, 0.06);
+            --shadow-subtle: 0 2px 8px rgba(18, 25, 30, 0.04);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html,body { height: 100%; }
 
         body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, var(--color-5) 0%, var(--color-1) 100%);
-            min-height: 100vh;
+            font-family: 'Roboto', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            background: linear-gradient(180deg, var(--bg) 0%, #eef2f5 100%);
+            color: #111827;
+            -webkit-font-smoothing:antialiased;
+            padding: 36px 20px;
             display: flex;
-            flex-direction: column;
-            padding: 20px;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
         }
 
-        .container {
-            max-width: 800px;
+        .wrap {
             width: 100%;
-            margin: 0 auto;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
+            max-width: 920px;
         }
 
         .header {
-            text-align: center;
-            margin-bottom: 40px;
-            animation: fadeInDown 0.6s ease-out;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 22px;
+            padding: 20px 24px;
+            border-radius: 12px;
+            background: linear-gradient(90deg, rgba(192,75,75,0.06), rgba(73,135,121,0.02));
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .brand-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 64px;
+            height: 64px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--brand) 0%, var(--warm-1) 100%);
+            color: white;
+            font-size: 28px;
+            box-shadow: 0 4px 14px rgba(192,75,75,0.18);
         }
 
         .header h1 {
-            color: var(--color-2);
-            font-size: 2.5rem;
-            font-weight: 500;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .header-icon {
-            font-size: 2.5rem;
-            color: var(--color-3);
+            font-size: 1.5rem;
+            color: var(--deep);
+            font-weight: 600;
+            letter-spacing: -0.2px;
         }
 
         .header p {
-            color: var(--color-2);
-            font-size: 1.1rem;
-            font-weight: 300;
+            color: var(--muted);
+            font-size: 0.95rem;
+            margin-top: 4px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 22px;
+            margin-top: 18px;
+        }
+
+        @media (max-width: 900px) {
+            .grid { grid-template-columns: 1fr; }
         }
 
         .card {
-            background: white;
-            border-radius: 16px;
-            box-shadow: var(--shadow-3);
-            padding: 40px;
-            margin-bottom: 24px;
-            animation: fadeInUp 0.6s ease-out;
-        }
-
-        .form-group {
-            margin-bottom: 24px;
+            background: var(--panel);
+            border-radius: 14px;
+            padding: 22px;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid var(--border);
         }
 
         label {
             display: block;
-            color: var(--color-2);
+            margin-bottom: 8px;
             font-weight: 500;
-            margin-bottom: 12px;
-            font-size: 1rem;
+            color: var(--deep);
+            font-size: 0.95rem;
         }
 
         textarea {
             width: 100%;
-            min-height: 200px;
-            padding: 16px;
-            border: 2px solid var(--color-1);
-            border-radius: 12px;
-            font-family: 'Roboto', sans-serif;
-            font-size: 1rem;
+            min-height: 220px;
+            padding: 14px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--glass);
             resize: vertical;
-            transition: all 0.3s ease;
-            background-color: #fafafa;
+            font-size: 1rem;
+            color: #111827;
+            transition: box-shadow .12s ease, transform .08s ease;
         }
 
         textarea:focus {
             outline: none;
-            border-color: var(--color-2);
-            background-color: white;
-            box-shadow: 0 0 0 3px rgba(149, 125, 173, 0.1);
-        }
-
-        textarea::placeholder {
-            color: #aaa;
+            box-shadow: 0 6px 20px rgba(73,135,121,0.08);
+            border-color: var(--teal);
+            background: #fff;
         }
 
         .btn {
-            background: linear-gradient(135deg, var(--color-2) 0%, var(--color-3) 100%);
-            color: white;
-            padding: 14px 32px;
-            border: none;
-            border-radius: 28px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow-2);
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            gap: 10px;
+            background: linear-gradient(90deg, var(--brand) 0%, var(--warm-1) 100%);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(192,75,75,0.12);
+            transition: transform .08s ease, box-shadow .12s ease;
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-3);
+        .btn:active { transform: translateY(1px); }
+        .btn[disabled] { opacity: 0.7; cursor: not-allowed; }
+
+        .info {
+            margin-top: 14px;
+            padding: 12px 14px;
+            background: linear-gradient(180deg, rgba(73,135,121,0.03), rgba(240,242,243,0.02));
+            border-left: 4px solid var(--teal);
+            border-radius: 8px;
+            color: var(--muted);
+            font-size: 0.92rem;
         }
 
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn-icon {
-            font-size: 1.2rem;
+        /* Right column / results */
+        .result-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
         }
 
         .result-card {
-            background: white;
-            border-radius: 16px;
-            padding: 32px;
-            box-shadow: var(--shadow-3);
-            animation: slideIn 0.5s ease-out;
-            margin-top: 24px;
-        }
-
-        .result-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .result-icon {
-            font-size: 2rem;
+            padding: 18px;
+            border-radius: 12px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,250,0.96));
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-subtle);
         }
 
         .result-title {
-            color: var(--color-2);
-            font-size: 1.5rem;
-            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: var(--deep);
         }
 
         .result-content {
-            padding: 24px;
-            border-radius: 12px;
-            text-align: center;
-            font-size: 1.8rem;
-            font-weight: 500;
-            letter-spacing: 0.5px;
+            margin-top: 14px;
+            padding: 16px;
+            border-radius: 10px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
         }
 
         .result-ai {
-            background: linear-gradient(135deg, var(--color-4) 0%, var(--color-1) 100%);
-            color: var(--color-2);
-            border: 3px solid var(--color-3);
+            background: linear-gradient(90deg, rgba(192,75,75,0.06), rgba(224,155,94,0.02));
+            border: 1px solid rgba(192,75,75,0.08);
         }
 
         .result-human {
-            background: linear-gradient(135deg, var(--color-5) 0%, var(--color-4) 100%);
-            color: var(--color-2);
-            border: 3px solid var(--color-3);
+            background: linear-gradient(90deg, rgba(73,135,121,0.06), rgba(241,210,123,0.02));
+            border: 1px solid rgba(73,135,121,0.06);
         }
 
-        .result-badge {
+        .result-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 10px;
             display: inline-flex;
             align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .result-icon.ai { background: linear-gradient(135deg, var(--brand), var(--warm-1)); }
+        .result-icon.human { background: linear-gradient(135deg, var(--teal), var(--warm-2)); }
+
+        .result-badge {
+            margin-left: auto;
+            background: #fff;
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-weight: 600;
+            color: var(--muted);
+            border: 1px solid var(--border);
+            display: inline-flex;
             gap: 8px;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin-top: 16px;
-            background: white;
-            color: var(--color-2);
-            box-shadow: var(--shadow-1);
-        }
-
-        .error-card {
-            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
-            border-left: 4px solid #e53935;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 24px;
-            animation: shake 0.5s ease-out;
-            display: flex;
             align-items: center;
-            gap: 12px;
+            font-size: 0.9rem;
         }
 
-        .error-icon {
-            color: #e53935;
-            font-size: 1.5rem;
-        }
-
-        .error-text {
-            color: #c62828;
-            font-weight: 500;
-        }
-
-        .footer {
+        /* Confidence */
+        .confidence {
+            margin-top: 12px;
             text-align: center;
-            margin-top: 40px;
-            color: var(--color-2);
-            font-size: 0.9rem;
-            font-weight: 300;
-        }
-
-        .info-box {
-            background: linear-gradient(135deg, var(--color-5) 0%, var(--color-1) 100%);
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 24px;
-            border-left: 4px solid var(--color-2);
-        }
-
-        .info-box h3 {
-            color: var(--color-2);
-            font-size: 1rem;
-            font-weight: 500;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .info-box p {
-            color: var(--color-2);
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-
-        /* Confidence Score Styles */
-        .confidence-section {
-            margin-top: 24px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 12px;
-        }
-
-        .confidence-label {
-            text-align: center;
-            font-size: 0.9rem;
-            color: var(--color-2);
-            font-weight: 500;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .confidence-score {
-            text-align: center;
-            font-size: 3rem;
+            font-size: 2.4rem;
             font-weight: 700;
-            color: var(--color-2);
-            margin: 12px 0;
+            color: var(--deep);
         }
 
-        .probability-bars {
-            margin-top: 24px;
+        .confidence-sub {
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-top: 6px;
         }
 
-        .probability-item {
-            margin-bottom: 16px;
-        }
-
-        .probability-header {
-            display: flex;
+        /* Probability bars */
+        .probability-item { margin-top: 12px; }
+        .prob-header {
+            display:flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--color-2);
-        }
-
-        .probability-label {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .probability-value {
-            font-weight: 700;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 24px;
-            background: rgba(149, 125, 173, 0.1);
-            border-radius: 12px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--color-2) 0%, var(--color-3) 100%);
-            border-radius: 12px;
-            transition: width 1s ease-out;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 8px;
-            color: white;
-            font-size: 0.75rem;
             font-weight: 600;
+            color: var(--deep);
+            font-size: 0.92rem;
+            margin-bottom: 8px;
         }
 
-        .progress-fill-human {
-            background: linear-gradient(90deg, #957DAD 0%, #D291BC 100%);
+        .bar {
+            height: 14px;
+            background: linear-gradient(90deg, rgba(17,24,39,0.04), rgba(17,24,39,0.02));
+            border-radius: 999px;
+            overflow: hidden;
+            border: 1px solid var(--border);
         }
 
-        .progress-fill-ai {
-            background: linear-gradient(90deg, #D291BC 0%, #FEC8D8 100%);
+        .fill-human {
+            height: 100%;
+            background: linear-gradient(90deg, var(--teal), var(--warm-2));
+            border-radius: 999px;
+            transition: width 0.9s cubic-bezier(.2,.9,.2,1);
         }
 
-        /* Animations */
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .fill-ai {
+            height: 100%;
+            background: linear-gradient(90deg, var(--brand), var(--warm-1));
+            border-radius: 999px;
+            transition: width 0.9s cubic-bezier(.2,.9,.2,1);
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* Error */
+        .error-card {
+            background: linear-gradient(180deg, rgba(240, 231, 231, 0.95), rgba(255,255,255,0.96));
+            border-left: 4px solid var(--brand);
+            border-radius: 10px;
+            padding: 12px 14px;
+            color: var(--deep);
+            margin-bottom: 12px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+        .footer {
+            margin-top: 22px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.88rem;
         }
 
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2rem;
-            }
-
-            .card {
-                padding: 24px;
-            }
-
-            .result-content {
-                font-size: 1.4rem;
-            }
-        }
-
-        /* Loading state */
+        /* loading spinner used inside button */
         .loading {
             display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,.3);
+            border-top-color: rgba(255,255,255,0.9);
             border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
+            animation: spin 1s linear infinite;
         }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="wrap">
         <div class="header">
-            <h1>
-                <span class="material-icons header-icon">psychology</span>
-                AI Essay Classifier
-            </h1>
-            <p>Determine if an essay was written by AI or a human</p>
+            <div class="brand-icon">
+                <span class="material-icons">psychology</span>
+            </div>
+            <div>
+                <h1>AI Essay Classifier</h1>
+                <p>Assess whether an essay is likely AI-generated or human-written</p>
+            </div>
         </div>
 
         {% if result and not result.success %}
         <div class="error-card">
-            <span class="material-icons error-icon">error_outline</span>
-            <span class="error-text">{{ result.error }}</span>
+            <span class="material-icons" style="color:var(--brand);">error_outline</span>
+            <div style="font-weight:600">{{ result.error }}</div>
         </div>
         {% endif %}
 
-        <div class="card">
-            <form method="POST" id="classifierForm">
-                <div class="form-group">
-                    <label for="text">
-                        <span class="material-icons" style="vertical-align: middle; margin-right: 4px; font-size: 1.2rem;">description</span>
-                        Paste Essay Text
-                    </label>
-                    <textarea
-                        name="text"
-                        id="text"
-                        placeholder="Paste the essay text here for classification..."
-                        required
-                    >{{ text if text else '' }}</textarea>
-                </div>
+        <div class="grid">
+            <div>
+                <div class="card">
+                    <form method="POST" id="classifierForm">
+                        <label for="text">
+                            <span class="material-icons" style="vertical-align: middle; margin-right: 6px; font-size: 1rem;">description</span>
+                            Paste Essay Text
+                        </label>
+                        <textarea name="text" id="text" placeholder="Paste the essay text here for classification..." required>{{ text if text else '' }}</textarea>
 
-                <button type="submit" class="btn">
-                    <span class="material-icons btn-icon">analytics</span>
-                    Classify Text
-                </button>
-            </form>
-
-            <div class="info-box">
-                <h3>
-                    <span class="material-icons" style="font-size: 1rem;">info</span>
-                    How it works
-                </h3>
-                <p>
-                    This classifier uses machine learning to analyze the text and determine whether it was likely
-                    written by AI or a human. The model examines writing patterns, vocabulary usage, and stylistic
-                    features to make its prediction.
-                </p>
-            </div>
-        </div>
-
-        {% if result and result.success %}
-        <div class="result-card">
-            <div class="result-header">
-                <span class="material-icons result-icon" style="color: var(--color-2);">assessment</span>
-                <h2 class="result-title">Classification Result</h2>
-            </div>
-
-            {% if result.prediction == "AI-Generated" %}
-            <div class="result-content result-ai">
-                <div>
-                    <span class="material-icons" style="font-size: 3rem; vertical-align: middle;">smart_toy</span>
-                    <div style="margin-top: 12px;">{{ result.prediction }}</div>
-                </div>
-                <div class="result-badge">
-                    <span class="material-icons" style="font-size: 1rem;">computer</span>
-                    This text appears to be generated by AI
-                </div>
-            </div>
-            {% else %}
-            <div class="result-content result-human">
-                <div>
-                    <span class="material-icons" style="font-size: 3rem; vertical-align: middle;">person</span>
-                    <div style="margin-top: 12px;">{{ result.prediction }}</div>
-                </div>
-                <div class="result-badge">
-                    <span class="material-icons" style="font-size: 1rem;">edit</span>
-                    This text appears to be written by a human
-                </div>
-            </div>
-            {% endif %}
-
-            <!-- Confidence Score Section -->
-            <div class="confidence-section">
-                <div class="confidence-label">
-                    <span class="material-icons" style="vertical-align: middle; font-size: 1rem;">analytics</span>
-                    Confidence Score
-                </div>
-                <div class="confidence-score">{{ result.confidence }}%</div>
-
-                <!-- Probability Bars -->
-                <div class="probability-bars">
-                    <div class="probability-item">
-                        <div class="probability-header">
-                            <div class="probability-label">
-                                <span class="material-icons" style="font-size: 1rem;">person</span>
-                                Human-Written
-                            </div>
-                            <div class="probability-value">{{ result.probabilities.human }}%</div>
+                        <div style="display:flex; gap:12px; margin-top:14px; align-items:center;">
+                            <button type="submit" class="btn">
+                                <span class="material-icons">analytics</span>
+                                Analyze Text
+                            </button>
+                            <div style="color:var(--muted); font-size:0.9rem;">Model inspects style, vocabulary, and patterns</div>
                         </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill progress-fill-human" style="width: {{ result.probabilities.human }}%"></div>
-                        </div>
-                    </div>
+                    </form>
 
-                    <div class="probability-item">
-                        <div class="probability-header">
-                            <div class="probability-label">
-                                <span class="material-icons" style="font-size: 1rem;">smart_toy</span>
-                                AI-Generated
-                            </div>
-                            <div class="probability-value">{{ result.probabilities.ai }}%</div>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill progress-fill-ai" style="width: {{ result.probabilities.ai }}%"></div>
+                    <div class="info" style="margin-top:16px;">
+                        <strong style="color:var(--deep);">How it works</strong>
+                        <div style="margin-top:6px;">
+                            Uses a trained classifier to evaluate stylistic and lexical signals. Results are probabilistic and should be used as guidance.
                         </div>
                     </div>
                 </div>
             </div>
+
+            <aside class="result-panel">
+                {% if result and result.success %}
+                <div class="result-card">
+                    <div class="result-title">
+                        <span class="material-icons" style="font-size:20px; color:var(--muted);">assessment</span>
+                        Classification Result
+                    </div>
+
+                    {% if result.prediction == "AI-Generated" %}
+                    <div class="result-content result-ai" style="margin-top:12px;">
+                        <div class="result-icon ai">
+                            <span class="material-icons">smart_toy</span>
+                        </div>
+                        <div style="flex:1">
+                            <div style="font-weight:700; color:var(--deep); font-size:1.05rem;">{{ result.prediction }}</div>
+                            <div style="color:var(--muted); margin-top:6px;">This text is likely generated by an AI model.</div>
+                        </div>
+                        <div class="result-badge"><span class="material-icons" style="font-size:16px; color:var(--brand);">computer</span>AI</div>
+                    </div>
+                    {% else %}
+                    <div class="result-content result-human" style="margin-top:12px;">
+                        <div class="result-icon human">
+                            <span class="material-icons">person</span>
+                        </div>
+                        <div style="flex:1">
+                            <div style="font-weight:700; color:var(--deep); font-size:1.05rem;">{{ result.prediction }}</div>
+                            <div style="color:var(--muted); margin-top:6px;">This text is likely written by a human author.</div>
+                        </div>
+                        <div class="result-badge"><span class="material-icons" style="font-size:16px; color:var(--teal);">edit</span>Human</div>
+                    </div>
+                    {% endif %}
+
+                    <div class="confidence" style="margin-top:14px;">
+                        <div class="confidence-score">{{ result.confidence }}%</div>
+                        <div class="confidence-sub">Overall confidence</div>
+                    </div>
+
+                    <div style="margin-top:14px;">
+                        <div class="probability-item">
+                            <div class="prob-header">
+                                <div style="display:flex; align-items:center; gap:8px;">
+                                    <span class="material-icons" style="font-size:18px; color:var(--muted);">person</span>
+                                    <div style="font-weight:600; color:var(--deep);">Human-Written</div>
+                                </div>
+                                <div style="font-weight:700; color:var(--deep)">{{ result.probabilities.human }}%</div>
+                            </div>
+                            <div class="bar">
+                                <div class="fill-human" style="width: {{ result.probabilities.human }}%"></div>
+                            </div>
+                        </div>
+
+                        <div class="probability-item">
+                            <div class="prob-header">
+                                <div style="display:flex; align-items:center; gap:8px;">
+                                    <span class="material-icons" style="font-size:18px; color:var(--muted);">smart_toy</span>
+                                    <div style="font-weight:600; color:var(--deep);">AI-Generated</div>
+                                </div>
+                                <div style="font-weight:700; color:var(--deep)">{{ result.probabilities.ai }}%</div>
+                            </div>
+                            <div class="bar">
+                                <div class="fill-ai" style="width: {{ result.probabilities.ai }}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="result-card" style="padding:20px;">
+                    <div style="font-weight:700; color:var(--deep);">No result yet</div>
+                    <div style="color:var(--muted); margin-top:8px;">Paste text and click Analyze Text to see classification and confidence details.</div>
+                </div>
+                {% endif %}
+            </aside>
         </div>
-        {% endif %}
 
         <div class="footer">
-            <p>ML-Powered Text Classification System</p>
-            <p style="margin-top: 8px; opacity: 0.7;">Built with Flask & Machine Learning</p>
+            ML-Powered Text Classification System • Built with Flask & Machine Learning
         </div>
     </div>
 
     <script>
-        // Optional: Add loading state to button when form is submitted
+        // Loading state for submit button
         document.getElementById('classifierForm').addEventListener('submit', function(e) {
             const btn = this.querySelector('.btn');
-            const originalContent = btn.innerHTML;
+            const original = btn.innerHTML;
             btn.innerHTML = '<span class="loading"></span> Analyzing...';
             btn.disabled = true;
 
-            // Re-enable button if form validation fails
             setTimeout(() => {
                 if (!this.checkValidity()) {
-                    btn.innerHTML = originalContent;
+                    btn.innerHTML = original;
                     btn.disabled = false;
                 }
-            }, 100);
+            }, 120);
         });
 
         // Auto-resize textarea
         const textarea = document.getElementById('text');
-        textarea.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = (this.scrollHeight) + 'px';
-        });
+        if (textarea) {
+            textarea.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+            // init height
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+        }
     </script>
 </body>
 </html>
