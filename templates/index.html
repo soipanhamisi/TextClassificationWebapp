@@ -1,474 +1,285 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Essay Classifier</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <style>
-        :root {
-            /* Theme colors from UI-instructions.txt */
-            --brand: #C04B4B;    /* primary */
-            --warm-1: #E09B5E;   /* secondary */
-            --warm-2: #F1D27B;   /* accent */
-            --deep: #613A2B;     /* dark */
-            --teal: #498779;     /* accent-2 */
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AI Essay Classifier</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    :root{
+      --bg-1: #FFF7F2;
+      --bg-2: #F0FFF9;
+      --accent-1: #FF7A7A;   /* coral */
+      --accent-2: #4ED5B8;   /* mint */
+      --accent-3: #FFD36E;   /* sunny */
+      --ink: #2B2B2B;
+      --muted: #6C6E73;
+      --card: rgba(255,255,255,0.85);
+      --glass: rgba(255,255,255,0.7);
+      --shadow: 0 10px 30px rgba(45,45,50,0.08);
+    }
 
-            /* neutrals */
-            --bg: #F4F6F8;
-            --panel: #FFFFFF;
-            --muted: #6B7280;
-            --border: #E6E9EE;
-            --glass: rgba(255,255,255,0.85);
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family:"Baloo 2", system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+      background: radial-gradient(800px 400px at 10% 10%, rgba(255,215,130,0.08), transparent),
+                  linear-gradient(180deg,var(--bg-1),var(--bg-2));
+      color:var(--ink);
+      display:flex;
+      justify-content:center;
+      padding:40px 20px;
+    }
 
-            /* shadows */
-            --shadow-soft: 0 6px 18px rgba(18, 25, 30, 0.06);
-            --shadow-subtle: 0 2px 8px rgba(18, 25, 30, 0.04);
-        }
+    .wrap{width:100%;max-width:980px}
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+    .header{
+      display:flex;
+      align-items:center;
+      gap:16px;
+      padding:18px;
+      border-radius:18px;
+      background: linear-gradient(90deg, rgba(255,122,122,0.08), rgba(78,213,184,0.04));
+      box-shadow:var(--shadow);
+      margin-bottom:20px;
+      border: 1px solid rgba(255,255,255,0.6);
+    }
+    .logo {
+      width:72px;height:72px;border-radius:18px;
+      display:inline-flex;align-items:center;justify-content:center;
+      font-size:34px;color:white;
+      background: conic-gradient(from 120deg,#FF7A7A,#FFD36E,#4ED5B8);
+      box-shadow:0 8px 18px rgba(78,213,184,0.12);
+    }
+    .header h1{font-size:1.6rem;margin-bottom:4px}
+    .header p{color:var(--muted);font-size:0.95rem;margin-top:2px}
 
-        html,body { height: 100%; }
+    .grid{display:grid;grid-template-columns:1fr 380px;gap:20px}
+    @media (max-width:900px){ .grid{grid-template-columns:1fr} }
 
-        body {
-            font-family: 'Roboto', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-            background: linear-gradient(180deg, var(--bg) 0%, #eef2f5 100%);
-            color: #111827;
-            -webkit-font-smoothing:antialiased;
-            padding: 36px 20px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-        }
+    .card{
+      background:var(--card);
+      border-radius:18px;
+      padding:18px;
+      box-shadow:var(--shadow);
+      border: 1px solid rgba(0,0,0,0.03);
+      backdrop-filter: blur(6px);
+    }
 
-        .wrap {
-            width: 100%;
-            max-width: 920px;
-        }
+    label{display:block;color:var(--ink);font-weight:600;margin-bottom:8px}
+    textarea{
+      width:100%;min-height:210px;padding:14px;border-radius:12px;border:none;
+      background:var(--glass);resize:vertical;font-size:1rem;color:var(--ink);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+    }
+    textarea:focus{outline:none;box-shadow:0 8px 30px rgba(78,213,184,0.12);transform:translateY(-1px)}
 
-        .header {
-            display: flex;
-            align-items: center;
-            gap: 18px;
-            margin-bottom: 22px;
-            padding: 20px 24px;
-            border-radius: 12px;
-            background: linear-gradient(90deg, rgba(192,75,75,0.06), rgba(73,135,121,0.02));
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow-subtle);
-        }
+    .controls{display:flex;gap:12px;align-items:center;margin-top:12px}
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;padding:12px 16px;border-radius:12px;
+      background:linear-gradient(90deg,var(--accent-1),var(--accent-3));color:white;font-weight:700;
+      border:none;cursor:pointer;box-shadow: 0 8px 20px rgba(255,122,122,0.14);
+      transition:transform .12s ease;
+    }
+    .btn:active{transform:translateY(2px)}
+    .hint{color:var(--muted);font-size:0.95rem}
 
-        .brand-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 64px;
-            height: 64px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, var(--brand) 0%, var(--warm-1) 100%);
-            color: white;
-            font-size: 28px;
-            box-shadow: 0 4px 14px rgba(192,75,75,0.18);
-        }
+    .playful-note{margin-top:14px;padding:10px;border-radius:12px;background:linear-gradient(90deg,rgba(78,213,184,0.06),rgba(255,211,110,0.04));color:var(--muted)}
 
-        .header h1 {
-            font-size: 1.5rem;
-            color: var(--deep);
-            font-weight: 600;
-            letter-spacing: -0.2px;
-        }
+    /* result column */
+    .result-panel{display:flex;flex-direction:column;gap:16px}
+    .result-card{
+      padding:16px;border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,0.95),rgba(255,255,255,0.92));
+      border:1px solid rgba(0,0,0,0.03);box-shadow:var(--shadow);transition:transform .35s ease,box-shadow .35s ease;
+      position:relative;overflow:visible;
+    }
+    .result-card.pop { transform: scale(1.02) rotate(-1deg); box-shadow: 0 18px 40px rgba(45,45,50,0.12); }
 
-        .header p {
-            color: var(--muted);
-            font-size: 0.95rem;
-            margin-top: 4px;
-        }
+    .result-title{display:flex;align-items:center;gap:10px;font-weight:700}
+    .result-content{display:flex;align-items:center;gap:12px;margin-top:12px;padding:12px;border-radius:12px}
+    .result-content.ai{background:linear-gradient(90deg,rgba(255,122,122,0.08),rgba(255,210,130,0.03))}
+    .result-content.human{background:linear-gradient(90deg,rgba(78,213,184,0.06),rgba(210,250,200,0.02))}
 
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 360px;
-            gap: 22px;
-            margin-top: 18px;
-        }
+    .avatar{width:70px;height:70px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;color:white;font-size:30px}
+    .avatar.ai{background:linear-gradient(135deg,#FF7A7A,#FFD36E); box-shadow: 0 8px 20px rgba(255,122,122,0.12)}
+    .avatar.human{background:linear-gradient(135deg,#4ED5B8,#FFD36E); box-shadow: 0 8px 20px rgba(78,213,184,0.12)}
 
-        @media (max-width: 900px) {
-            .grid { grid-template-columns: 1fr; }
-        }
+    .badge{margin-left:auto;padding:8px 12px;border-radius:999px;background:linear-gradient(90deg,rgba(255,255,255,0.8),rgba(255,255,255,0.6));font-weight:700;color:var(--muted)}
 
-        .card {
-            background: var(--panel);
-            border-radius: 14px;
-            padding: 22px;
-            box-shadow: var(--shadow-soft);
-            border: 1px solid var(--border);
-        }
+    .confidence{margin-top:14px;text-align:center}
+    .confidence .big{font-size:2.2rem;font-weight:800;color:var(--ink)}
+    .confidence small{display:block;color:var(--muted);margin-top:6px}
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--deep);
-            font-size: 0.95rem;
-        }
+    .prob{margin-top:12px}
+    .prob .row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-weight:700;color:var(--ink)}
+    .bar{height:12px;border-radius:999px;background:linear-gradient(90deg,rgba(0,0,0,0.03),rgba(0,0,0,0.01));overflow:hidden}
+    .fill-ai{height:100%;background:linear-gradient(90deg,#FF7A7A,#FFD36E);transition:width .9s}
+    .fill-human{height:100%;background:linear-gradient(90deg,#4ED5B8,#FFD36E);transition:width .9s}
 
-        textarea {
-            width: 100%;
-            min-height: 220px;
-            padding: 14px 16px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            background: var(--glass);
-            resize: vertical;
-            font-size: 1rem;
-            color: #111827;
-            transition: box-shadow .12s ease, transform .08s ease;
-        }
+    /* playful small decorations */
+    .bubble{
+      position:absolute;width:16px;height:16px;border-radius:50%;opacity:0.12;
+      background:radial-gradient(circle at 40% 30%,white,transparent);
+      filter: blur(6px);
+    }
+    .bubble.b1{left:12px;top:8px;background:linear-gradient(90deg,#FFD36E,#FF7A7A)}
+    .bubble.b2{right:14px;top:6px;width:22px;height:22px;background:linear-gradient(90deg,#4ED5B8,#FFD36E)}
+    .bubble.b3{left:20px;bottom:10px;width:10px;height:10px;background:#FF7A7A}
 
-        textarea:focus {
-            outline: none;
-            box-shadow: 0 6px 20px rgba(73,135,121,0.08);
-            border-color: var(--teal);
-            background: #fff;
-        }
+    /* confetti */
+    .confetti{
+      position:fixed;left:0;top:0;pointer-events:none;
+      width:8px;height:12px;opacity:0;transform:translateY(0) rotate(0) scale(1);
+      border-radius:2px;will-change:transform,opacity;
+      animation: fall 900ms linear forwards;
+    }
+    @keyframes fall{
+      to{ transform: translateY(420px) rotate(520deg) translateX(60px); opacity:1; }
+    }
 
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: linear-gradient(90deg, var(--brand) 0%, var(--warm-1) 100%);
-            color: white;
-            padding: 12px 18px;
-            border-radius: 10px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 8px 24px rgba(192,75,75,0.12);
-            transition: transform .08s ease, box-shadow .12s ease;
-        }
-
-        .btn:active { transform: translateY(1px); }
-        .btn[disabled] { opacity: 0.7; cursor: not-allowed; }
-
-        .info {
-            margin-top: 14px;
-            padding: 12px 14px;
-            background: linear-gradient(180deg, rgba(73,135,121,0.03), rgba(240,242,243,0.02));
-            border-left: 4px solid var(--teal);
-            border-radius: 8px;
-            color: var(--muted);
-            font-size: 0.92rem;
-        }
-
-        /* Right column / results */
-        .result-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-        }
-
-        .result-card {
-            padding: 18px;
-            border-radius: 12px;
-            background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,250,0.96));
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow-subtle);
-        }
-
-        .result-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 600;
-            color: var(--deep);
-        }
-
-        .result-content {
-            margin-top: 14px;
-            padding: 16px;
-            border-radius: 10px;
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-
-        .result-ai {
-            background: linear-gradient(90deg, rgba(192,75,75,0.06), rgba(224,155,94,0.02));
-            border: 1px solid rgba(192,75,75,0.08);
-        }
-
-        .result-human {
-            background: linear-gradient(90deg, rgba(73,135,121,0.06), rgba(241,210,123,0.02));
-            border: 1px solid rgba(73,135,121,0.06);
-        }
-
-        .result-icon {
-            width: 64px;
-            height: 64px;
-            border-radius: 10px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 28px;
-            flex-shrink: 0;
-        }
-
-        .result-icon.ai { background: linear-gradient(135deg, var(--brand), var(--warm-1)); }
-        .result-icon.human { background: linear-gradient(135deg, var(--teal), var(--warm-2)); }
-
-        .result-badge {
-            margin-left: auto;
-            background: #fff;
-            border-radius: 999px;
-            padding: 8px 12px;
-            font-weight: 600;
-            color: var(--muted);
-            border: 1px solid var(--border);
-            display: inline-flex;
-            gap: 8px;
-            align-items: center;
-            font-size: 0.9rem;
-        }
-
-        /* Confidence */
-        .confidence {
-            margin-top: 12px;
-            text-align: center;
-        }
-
-        .confidence-score {
-            font-size: 2.4rem;
-            font-weight: 700;
-            color: var(--deep);
-        }
-
-        .confidence-sub {
-            color: var(--muted);
-            font-size: 0.92rem;
-            margin-top: 6px;
-        }
-
-        /* Probability bars */
-        .probability-item { margin-top: 12px; }
-        .prob-header {
-            display:flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-            color: var(--deep);
-            font-size: 0.92rem;
-            margin-bottom: 8px;
-        }
-
-        .bar {
-            height: 14px;
-            background: linear-gradient(90deg, rgba(17,24,39,0.04), rgba(17,24,39,0.02));
-            border-radius: 999px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-        }
-
-        .fill-human {
-            height: 100%;
-            background: linear-gradient(90deg, var(--teal), var(--warm-2));
-            border-radius: 999px;
-            transition: width 0.9s cubic-bezier(.2,.9,.2,1);
-        }
-
-        .fill-ai {
-            height: 100%;
-            background: linear-gradient(90deg, var(--brand), var(--warm-1));
-            border-radius: 999px;
-            transition: width 0.9s cubic-bezier(.2,.9,.2,1);
-        }
-
-        /* Error */
-        .error-card {
-            background: linear-gradient(180deg, rgba(240, 231, 231, 0.95), rgba(255,255,255,0.96));
-            border-left: 4px solid var(--brand);
-            border-radius: 10px;
-            padding: 12px 14px;
-            color: var(--deep);
-            margin-bottom: 12px;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .footer {
-            margin-top: 22px;
-            text-align: center;
-            color: var(--muted);
-            font-size: 0.88rem;
-        }
-
-        /* loading spinner used inside button */
-        .loading {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(255,255,255,.3);
-            border-top-color: rgba(255,255,255,0.9);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-    </style>
+    /* small bounce for icons */
+    .material-icons.play{animation:bounce 1000ms ease infinite}
+    @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  </style>
 </head>
 <body>
-    <div class="wrap">
-        <div class="header">
-            <div class="brand-icon">
-                <span class="material-icons">psychology</span>
-            </div>
-            <div>
-                <h1>AI Essay Classifier</h1>
-                <p>Assess whether an essay is likely AI-generated or human-written</p>
-            </div>
-        </div>
+  <div class="wrap">
+    <header class="header">
+      <div class="logo">✨</div>
+      <div>
+        <h1>Essay AI Sniffer</h1>
+        <p>Give a text a spin — see whether it feels human or AI-made</p>
+      </div>
+    </header>
 
-        {% if result and not result.success %}
-        <div class="error-card">
-            <span class="material-icons" style="color:var(--brand);">error_outline</span>
-            <div style="font-weight:600">{{ result.error }}</div>
+    <div class="grid">
+      <main>
+        <div class="card">
+          <form method="POST" id="classifierForm" novalidate>
+            <label for="text">
+              <span class="material-icons" style="vertical-align:middle;margin-right:6px;font-size:20px">description</span>
+              Paste your essay
+            </label>
+            <textarea id="text" name="text" placeholder="Paste the essay text here…" required>{{ text if text else '' }}</textarea>
+
+            <div class="controls">
+              <button class="btn" type="submit">
+                <span class="material-icons">casino</span>
+                Classify ✨
+              </button>
+              <div class="hint">Click Button to get Feedback</div>
+            </div>
+          </form>
+
+          <div class="playful-note">
+            Tip: treat the feedback as guidance, and not final verdicts.
+          </div>
+        </div>
+      </main>
+
+      <aside class="result-panel">
+        {% if result and result.success %}
+        <div class="result-card" id="resultCard" data-prediction="{{ result.prediction }}">
+          <div class="bubble b1"></div>
+          <div class="bubble b2"></div>
+          <div class="bubble b3"></div>
+
+          <div class="result-title">
+            <span class="material-icons play" style="color:var(--muted);font-size:20px">insights</span>
+            Classification
+          </div>
+
+          {% if result.prediction == "AI-Generated" %}
+          <div class="result-content ai">
+            <div class="avatar ai"><span class="material-icons">smart_toy</span></div>
+            <div style="flex:1">
+              <div style="font-weight:800;font-size:1.05rem">{{ result.prediction }}</div>
+              <div style="color:var(--muted);margin-top:6px">This one leans AI — quirks in phrasing and token patterns detected.</div>
+            </div>
+            <div class="badge">🤖 AI</div>
+          </div>
+          {% else %}
+          <div class="result-content human">
+            <div class="avatar human"><span class="material-icons">emoji_people</span></div>
+            <div style="flex:1">
+              <div style="font-weight:800;font-size:1.05rem">{{ result.prediction }}</div>
+              <div style="color:var(--muted);margin-top:6px">Looks human — natural phrasing and variety of structure.</div>
+            </div>
+            <div class="badge">🧑‍🎓 Human</div>
+          </div>
+          {% endif %}
+
+          <div class="confidence">
+            <div class="big">{{ result.confidence }}%</div>
+            <small>confidence</small>
+          </div>
+
+          <div class="prob">
+            <div class="row">
+              <div style="display:flex;align-items:center;gap:8px"><span class="material-icons" style="font-size:18px;color:var(--muted)">emoji_people</span><div>Human</div></div>
+              <div style="font-weight:800">{{ result.probabilities.human }}%</div>
+            </div>
+            <div class="bar"><div class="fill-human" style="width:{{ result.probabilities.human }}%"></div></div>
+
+            <div class="row" style="margin-top:10px">
+              <div style="display:flex;align-items:center;gap:8px"><span class="material-icons" style="font-size:18px;color:var(--muted)">smart_toy</span><div>AI</div></div>
+              <div style="font-weight:800">{{ result.probabilities.ai }}%</div>
+            </div>
+            <div class="bar"><div class="fill-ai" style="width:{{ result.probabilities.ai }}%"></div></div>
+          </div>
+        </div>
+        {% else %}
+        <div class="result-card">
+          <div style="font-weight:800">No result yet</div>
+          <div style="color:var(--muted);margin-top:8px">Paste text and click Classify ✨ to get feedback.</div>
         </div>
         {% endif %}
-
-        <div class="grid">
-            <div>
-                <div class="card">
-                    <form method="POST" id="classifierForm">
-                        <label for="text">
-                            <span class="material-icons" style="vertical-align: middle; margin-right: 6px; font-size: 1rem;">description</span>
-                            Paste Essay Text
-                        </label>
-                        <textarea name="text" id="text" placeholder="Paste the essay text here for classification..." required>{{ text if text else '' }}</textarea>
-
-                        <div style="display:flex; gap:12px; margin-top:14px; align-items:center;">
-                            <button type="submit" class="btn">
-                                <span class="material-icons">analytics</span>
-                                Analyze Text
-                            </button>
-                            <div style="color:var(--muted); font-size:0.9rem;">Model inspects style, vocabulary, and patterns</div>
-                        </div>
-                    </form>
-
-                    <div class="info" style="margin-top:16px;">
-                        <strong style="color:var(--deep);">How it works</strong>
-                        <div style="margin-top:6px;">
-                            Uses a trained classifier to evaluate stylistic and lexical signals. Results are probabilistic and should be used as guidance.
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <aside class="result-panel">
-                {% if result and result.success %}
-                <div class="result-card">
-                    <div class="result-title">
-                        <span class="material-icons" style="font-size:20px; color:var(--muted);">assessment</span>
-                        Classification Result
-                    </div>
-
-                    {% if result.prediction == "AI-Generated" %}
-                    <div class="result-content result-ai" style="margin-top:12px;">
-                        <div class="result-icon ai">
-                            <span class="material-icons">smart_toy</span>
-                        </div>
-                        <div style="flex:1">
-                            <div style="font-weight:700; color:var(--deep); font-size:1.05rem;">{{ result.prediction }}</div>
-                            <div style="color:var(--muted); margin-top:6px;">This text is likely generated by an AI model.</div>
-                        </div>
-                        <div class="result-badge"><span class="material-icons" style="font-size:16px; color:var(--brand);">computer</span>AI</div>
-                    </div>
-                    {% else %}
-                    <div class="result-content result-human" style="margin-top:12px;">
-                        <div class="result-icon human">
-                            <span class="material-icons">person</span>
-                        </div>
-                        <div style="flex:1">
-                            <div style="font-weight:700; color:var(--deep); font-size:1.05rem;">{{ result.prediction }}</div>
-                            <div style="color:var(--muted); margin-top:6px;">This text is likely written by a human author.</div>
-                        </div>
-                        <div class="result-badge"><span class="material-icons" style="font-size:16px; color:var(--teal);">edit</span>Human</div>
-                    </div>
-                    {% endif %}
-
-                    <div class="confidence" style="margin-top:14px;">
-                        <div class="confidence-score">{{ result.confidence }}%</div>
-                        <div class="confidence-sub">Overall confidence</div>
-                    </div>
-
-                    <div style="margin-top:14px;">
-                        <div class="probability-item">
-                            <div class="prob-header">
-                                <div style="display:flex; align-items:center; gap:8px;">
-                                    <span class="material-icons" style="font-size:18px; color:var(--muted);">person</span>
-                                    <div style="font-weight:600; color:var(--deep);">Human-Written</div>
-                                </div>
-                                <div style="font-weight:700; color:var(--deep)">{{ result.probabilities.human }}%</div>
-                            </div>
-                            <div class="bar">
-                                <div class="fill-human" style="width: {{ result.probabilities.human }}%"></div>
-                            </div>
-                        </div>
-
-                        <div class="probability-item">
-                            <div class="prob-header">
-                                <div style="display:flex; align-items:center; gap:8px;">
-                                    <span class="material-icons" style="font-size:18px; color:var(--muted);">smart_toy</span>
-                                    <div style="font-weight:600; color:var(--deep);">AI-Generated</div>
-                                </div>
-                                <div style="font-weight:700; color:var(--deep)">{{ result.probabilities.ai }}%</div>
-                            </div>
-                            <div class="bar">
-                                <div class="fill-ai" style="width: {{ result.probabilities.ai }}%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% else %}
-                <div class="result-card" style="padding:20px;">
-                    <div style="font-weight:700; color:var(--deep);">No result yet</div>
-                    <div style="color:var(--muted); margin-top:8px;">Paste text and click Analyze Text to see classification and confidence details.</div>
-                </div>
-                {% endif %}
-            </aside>
-        </div>
-
-        <div class="footer">
-            ML-Powered Text Classification System • Built with Flask & Machine Learning
-        </div>
+      </aside>
     </div>
+    <div style="text-align:center;margin-top:18px;color:var(--muted)">Built with Flask</div>
+  </div>
 
-    <script>
-        // Loading state for submit button
-        document.getElementById('classifierForm').addEventListener('submit', function(e) {
-            const btn = this.querySelector('.btn');
-            const original = btn.innerHTML;
-            btn.innerHTML = '<span class="loading"></span> Analyzing...';
-            btn.disabled = true;
+  <script>
+    // submit loading microinteraction + preserve original behavior
+    document.getElementById('classifierForm').addEventListener('submit', function(e){
+      const btn = this.querySelector('.btn');
+      const orig = btn.innerHTML;
+      btn.innerHTML = '<span class="material-icons">hourglass_top</span> Thinking...';
+      btn.disabled = true;
+      setTimeout(()=> {
+        if (!this.checkValidity()) { btn.innerHTML = orig; btn.disabled = false; }
+      },150);
+    });
 
-            setTimeout(() => {
-                if (!this.checkValidity()) {
-                    btn.innerHTML = original;
-                    btn.disabled = false;
-                }
-            }, 120);
-        });
+    // auto-resize
+    const ta = document.getElementById('text');
+    if(ta){ ta.addEventListener('input', function(){ this.style.height='auto'; this.style.height = this.scrollHeight + 'px'; }); ta.style.height = ta.scrollHeight + 'px'; }
 
-        // Auto-resize textarea
-        const textarea = document.getElementById('text');
-        if (textarea) {
-            textarea.addEventListener('input', function() {
-                this.style.height = 'auto';
-                this.style.height = (this.scrollHeight) + 'px';
-            });
-            // init height
-            textarea.style.height = (textarea.scrollHeight) + 'px';
-        }
-    </script>
+    // playful pop + confetti when a result exists
+    (function(){
+      const rc = document.getElementById('resultCard');
+      if(!rc) return;
+      // pop animation
+      setTimeout(()=> rc.classList.add('pop'), 80);
+      setTimeout(()=> rc.classList.remove('pop'), 1100);
+
+      // confetti generator
+      const colors = ['#FF7A7A','#FFD36E','#4ED5B8','#94D3FF','#C28CFF'];
+      const count = 18;
+      for(let i=0;i<count;i++){
+        const c = document.createElement('div');
+        c.className = 'confetti';
+        c.style.left = (20 + Math.random()*60) + '%';
+        c.style.top = (10 + Math.random()*10) + '%';
+        c.style.background = colors[Math.floor(Math.random()*colors.length)];
+        c.style.transform = `translateY(0) rotate(${Math.random()*360}deg)`;
+        c.style.animationDelay = (Math.random()*200) + 'ms';
+        c.style.opacity = 0.95;
+        document.body.appendChild(c);
+        setTimeout(()=> c.remove(), 1100 + Math.random()*300);
+      }
+    })();
+  </script>
 </body>
 </html>
