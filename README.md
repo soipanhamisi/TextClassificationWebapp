@@ -1,26 +1,74 @@
-# AI Essay Classifier Web Application
+I'll examine the repository files to generate comprehensive app documentation for the text classification web application.# AI Essay Classifier Web Application - Complete Documentation
 
-A Flask-based web application that uses machine learning to classify text as either AI-generated or human-written. This project features a beautiful Material Design interface with custom color scheme.
+## 📋 Table of Contents
 
-## Features
+1. [Project Overview](#project-overview)
+2. [Features](#features)
+3. [Architecture](#architecture)
+4. [Installation & Setup](#installation--setup)
+5. [Usage Guide](#usage-guide)
+6. [API Documentation](#api-documentation)
+7. [Machine Learning Pipeline](#machine-learning-pipeline)
+8. [Frontend Documentation](#frontend-documentation)
+9. [Development Guide](#development-guide)
+10. [Model Training & Improvement](#model-training--improvement)
+11. [Troubleshooting](#troubleshooting)
+12. [Deployment](#deployment)
+13. [Contributing](#contributing)
 
-- ✨ Clean, modern Material Design UI
-- 🤖 ML-powered text classification (AI vs Human)
-- 📊 **Confidence scores** with visual probability bars
-- 📱 Responsive design for mobile and desktop
-- ⚡ Fast predictions using pre-trained models
-- 🎨 Custom color palette with smooth animations
-- 📈 Detailed prediction breakdown (Human % vs AI %)
+---
 
-## Technology Stack
+## 📖 Project Overview
 
-- **Backend**: Flask 3.0
-- **ML Libraries**: scikit-learn, NumPy
-- **Frontend**: HTML5, CSS3 (Material Design), Vanilla JavaScript
-- **Model**: Pre-trained Neural Network with TF-IDF + PCA pipeline
+The **AI Essay Classifier** is a Flask-based web application that uses machine learning to classify text as either **AI-generated** or **human-written**. Built as an educational project, it demonstrates end-to-end ML workflow implementation with a modern web interface.
 
-## Project Structure
+### 🎯 Purpose
+- **Primary**: Detect AI-generated vs human-written essays and text
+- **Educational**: Demonstrate ML pipeline integration in web applications
+- **Practical**: Provide both web UI and REST API for text classification
 
+### 🏗️ Tech Stack
+| Layer | Technology | Version |
+|-------|------------|---------|
+| **Backend** | Flask | 3.0.0 |
+| **ML Framework** | scikit-learn | ≥1.7.2 |
+| **Data Processing** | NumPy | ≥2.0.0 |
+| **Model Serialization** | Joblib | ≥1.3.0 |
+| **Frontend** | HTML5, CSS3, Vanilla JavaScript | - |
+| **UI Framework** | Material Design (custom) | - |
+| **Fonts** | Google Fonts (Roboto) | - |
+
+---
+
+## ✨ Features
+
+### 🌟 Core Features
+- ✅ **Text Classification**: AI-generated vs Human-written detection
+- ✅ **Confidence Scoring**: Percentage confidence in predictions
+- ✅ **Probability Breakdown**: Visual bars showing Human% vs AI%
+- ✅ **Material Design UI**: Modern, responsive interface
+- ✅ **REST API**: JSON endpoint for programmatic access
+- ✅ **Real-time Processing**: Instant results on form submission
+
+### 🎨 UI/UX Features
+- ✅ **Responsive Design**: Mobile and desktop optimized
+- ✅ **Custom Color Palette**: Warm, professional theme
+- ✅ **Loading Animations**: Visual feedback during processing
+- ✅ **Auto-resize Textarea**: Expands with content
+- ✅ **Error Handling**: User-friendly error messages
+- ✅ **Accessibility**: ARIA labels and semantic HTML
+
+### 🤖 ML Features
+- ✅ **Multi-stage Pipeline**: TF-IDF → Scaling → PCA → Neural Network
+- ✅ **Text Preprocessing**: Consistent cleaning and normalization
+- ✅ **Feature Engineering**: N-gram extraction and dimensionality reduction
+- ✅ **Model Persistence**: Serialized models for fast loading
+
+---
+
+## 🏛️ Architecture
+
+### 📁 Project Structure
 ```
 TextClassificationWebapp/
 ├── app.py                          # Main Flask application
@@ -28,219 +76,133 @@ TextClassificationWebapp/
 │   └── index.html                  # Material Design UI
 ├── TextClassificationWebapp/
 │   └── ml_assets/                  # Pre-trained ML models
-│       ├── best_nn_model.pkl       # Neural network model
-│       ├── tfidf_vectorizer.pkl    # TF-IDF vectorizer
-│       ├── scaler.pkl              # Feature scaler
+│       ├── best_nn_model.pkl       # Neural network classifier
+│       ├── tfidf_vectorizer.pkl    # TF-IDF feature extractor
+│       ├── scaler.pkl              # Standard scaler
 │       └── pca.pkl                 # PCA transformer
 ├── requirements.txt                # Python dependencies
-└── README.md                       # This file
+├── README.md                       # User documentation
+├── TRAINING_GUIDE.md              # ML training instructions
+└── .gitignore                     # Git ignore rules
 ```
 
-## ML Pipeline
+### 🔄 Application Flow
+```mermaid
+graph TD
+    A[User Input] --> B{Route?}
+    B -->|GET /| C[Render Form]
+    B -->|POST /| D[Process Form]
+    B -->|POST /api/predict| E[Process JSON]
+    
+    D --> F[Extract Text]
+    E --> F
+    F --> G[Clean Text]
+    G --> H[TF-IDF Transform]
+    H --> I[Standard Scaling]
+    I --> J[PCA Reduction]
+    J --> K[Neural Network]
+    K --> L[Generate Response]
+    
+    L --> M{Response Type?}
+    M -->|Web| N[Render HTML]
+    M -->|API| O[Return JSON]
+```
 
-The classification pipeline follows these preprocessing steps:
+### 🧠 ML Pipeline Architecture
+```
+Raw Text Input
+    ↓
+Text Cleaning (lowercase, remove punctuation/numbers)
+    ↓
+TF-IDF Vectorization (max_features=5000, ngram_range=(1,3))
+    ↓
+Standard Scaling (normalize features)
+    ↓
+PCA Dimensionality Reduction (n_components=200)
+    ↓
+Neural Network Classifier (MLPClassifier: 64→32 neurons)
+    ↓
+Prediction + Confidence Scores
+```
 
-1. **Text Cleaning**:
-   - Convert to lowercase
-   - Remove numbers and punctuation
-   - Remove extra whitespace
+---
 
-2. **Feature Extraction**:
-   - TF-IDF vectorization
-   - Standard scaling
-   - PCA dimensionality reduction
-
-3. **Prediction**:
-   - Neural network classification
-   - Binary output: AI-Generated (1) or Human-Written (0)
-
-## Installation & Setup
+## 🚀 Installation & Setup
 
 ### Prerequisites
+- **Python**: 3.8 or higher
+- **pip**: Python package manager
+- **Git**: For cloning repository
+- **Virtual Environment**: Recommended for isolation
 
-- Python 3.8 or higher
-- pip (Python package manager)
+### Step-by-Step Installation
 
-### Step 1: Clone the Repository
-
+#### 1. Clone Repository
 ```bash
-git clone <repository-url>
-cd TextClassificationWebapp
+git clone https://github.com/soipanhamisi/textclassificationwebapp.git
+cd textclassificationwebapp
 ```
 
-### Step 2: Create Virtual Environment (Recommended)
-
+#### 2. Create Virtual Environment
 ```bash
 # Create virtual environment
 python -m venv venv
 
 # Activate virtual environment
-# On Windows:
+# Windows:
 venv\Scripts\activate
-# On macOS/Linux:
+# macOS/Linux:
 source venv/bin/activate
 ```
 
-### Step 3: Install Dependencies
-
+#### 3. Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### Step 4: Verify ML Assets
+#### 4. Verify ML Assets
+Ensure these files exist in `TextClassificationWebapp/ml_assets/`:
+- `best_nn_model.pkl` (Neural network model)
+- `tfidf_vectorizer.pkl` (Feature extractor)
+- `scaler.pkl` (Data scaler)
+- `pca.pkl` (Dimensionality reducer)
 
-Ensure the following model files exist in `TextClassificationWebapp/ml_assets/`:
-- `best_nn_model.pkl`
-- `tfidf_vectorizer.pkl`
-- `scaler.pkl`
-- `pca.pkl`
-
-### Step 5: Run the Application
-
+#### 5. Run Application
 ```bash
 python app.py
 ```
 
-The application will start on `http://localhost:5000`
+The application starts on `http://localhost:5000`
 
-## Usage
-
-1. Open your browser and navigate to `http://localhost:5000`
-2. Paste essay text into the text area
-3. Click "Classify Text"
-4. View the prediction result with:
-   - Classification (AI-Generated or Human-Written)
-   - Confidence score (percentage)
-   - Probability breakdown (Human % vs AI %)
-
-## API Endpoint
-
-The application also provides a REST API endpoint for programmatic access:
-
-### POST `/api/predict`
-
-**Request:**
-```json
-{
-  "text": "Your essay text here..."
-}
-```
-
-**Response (Success):**
-```json
-{
-  "success": true,
-  "prediction": "AI-Generated",
-  "confidence": 87.35,
-  "probabilities": {
-    "human": 12.65,
-    "ai": 87.35
-  }
-}
-```
-
-**Response (Error):**
-```json
-{
-  "success": false,
-  "error": "Error message here"
-}
-```
-
-**Example using curl:**
-```bash
-curl -X POST http://localhost:5000/api/predict \
-  -H "Content-Type: application/json" \
-  -d '{"text": "The quick brown fox jumps over the lazy dog."}'
-```
-
-## Color Scheme
-
-The application uses a custom Material Design color palette:
-
-- Primary: `#957DAD` (Medium Purple)
-- Secondary: `#D291BC` (Pink Purple)
-- Accent 1: `#E0BBE4` (Light Purple)
-- Accent 2: `#FEC8D8` (Light Pink)
-- Background: `#FFDFD3` (Peach Cream)
-
-## Development
-
-### Running in Debug Mode
-
-The application runs in debug mode by default for development:
-
+### 🔧 Configuration Options
 ```python
-app.run(debug=True, host='0.0.0.0', port=5000)
+# In app.py, modify these settings:
+app.run(
+    debug=True,          # Set False for production
+    host='0.0.0.0',      # Change for specific host binding
+    port=5000            # Change for different port
+)
 ```
 
-For production deployment, set `debug=False` and use a production WSGI server like Gunicorn:
+---
 
-```bash
-pip install gunicorn
-gunicorn -w 4 -b 0.0.0.0:5000 app:app
-```
+## 📖 Usage Guide
 
-### Modifying the UI
+### 🌐 Web Interface
 
-The entire UI is contained in `templates/index.html`. All styles are inline using CSS variables for the color scheme, making it easy to customize.
+#### Accessing the Application
+1. Open browser and navigate to `http://localhost:5000`
+2. You'll see the main classification interface
 
-### Improving & Retraining ML Models
+#### Using the Classifier
+1. **Paste Text**: Enter essay or text content in the textarea
+2. **Click "Analyze Text"**: Submit for classification
+3. **View Results**: See prediction, confidence, and probability breakdown
 
-The current model provides a baseline accuracy. For better performance:
+#### Understanding Results
+- **Classification**: "AI-Generated" or "Human-Written"
+- **Confidence**: Overall confidence percentage (0-100%)
+- **Probability Bars**: Visual representation of Human% vs AI%
 
-**See the comprehensive [TRAINING_GUIDE.md](TRAINING_GUIDE.md) for:**
-- Recommended Kaggle datasets (DAIGT V2, AI vs Human Text, etc.)
-- Complete retraining script with hyperparameter tuning
-- Expected accuracy improvements (baseline ~65% → optimized ~92-95%)
-- Advanced techniques (ensemble methods, transformer models)
-- Data collection and augmentation tips
-
-**Quick steps:**
-1. Download a Kaggle dataset (e.g., DAIGT V2 - 150K+ essays)
-2. Run the training script from `TRAINING_GUIDE.md`
-3. New models automatically save to `TextClassificationWebapp/ml_assets/`
-4. Restart Flask application to load improved models
-
-**Current Model:**
-- Type: MLPClassifier (Neural Network)
-- Architecture: 64→32 neurons, ReLU activation
-- Pipeline: Text → TF-IDF → StandardScaler → PCA → Prediction
-- Output: Binary classification with confidence scores
-
-## Troubleshooting
-
-### ML Assets Not Loading
-
-If you see the warning "ML assets failed to load":
-
-1. Check that all `.pkl` files exist in the correct directory
-2. Verify the file paths in `app.py` (line 12)
-3. Ensure the files were created with compatible scikit-learn versions
-
-### Port Already in Use
-
-If port 5000 is already in use, change the port in `app.py`:
-
-```python
-app.run(debug=True, host='0.0.0.0', port=8080)  # Use different port
-```
-
-### Import Errors
-
-If you get import errors, ensure all dependencies are installed:
-
-```bash
-pip install -r requirements.txt --upgrade
-```
-
-## License
-
-This project is for educational purposes.
-
-## Acknowledgments
-
-- Built as a school learning project
-- Uses Flask web framework
-- Material Design principles for UI/UX
-- scikit-learn for machine learning pipeline
+## Link to the deployed webapp.  
+https://textclassificationwebapp-production.up.railway.app/
