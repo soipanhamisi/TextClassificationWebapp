@@ -201,6 +201,3 @@ app.run(
 - **Classification**: "AI-Generated" or "Human-Written"
 - **Confidence**: Overall confidence percentage (0-100%)
 - **Probability Bars**: Visual representation of Human% vs AI%
-
-## Link to the deployed webapp.  
-https://textclassificationwebapp-production.up.railway.app/
