@@ -9,6 +9,7 @@ __pycache__
 .idea
 .run
 *.log
+color-scheme.txt
 Dockerfile
 README.md
 TRAINING_GUIDE.md

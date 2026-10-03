@@ -25,5 +25,8 @@ jobs:
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_KEY }}
           script: |
-            cd ~/app
-            docker compose up -d --build
+            cd AiTextClassifier/TextClassififcationWebapp
+            git pull origin gcp-deployment
+            sudo -n docker compose build text-classification-webapp
+            sudo -n docker compose up -d --no-deps --force-recreate text-classification-webapp
+            sudo -n docker compose ps
