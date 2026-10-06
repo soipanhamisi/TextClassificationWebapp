@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_file
 import joblib
 import re
 import os
@@ -166,16 +166,32 @@ def predict_text(raw_text):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    """Main page route that handles both displaying the form and processing predictions."""
+    """Show the landing page, while keeping the original form POST compatible."""
     if request.method == 'POST':
         text = request.form.get('text', '')
         result = predict_text(text)
 
-        return render_template('index.html',
-                             text=text,
-                             result=result)
+        return render_template('workspace.html', text=text, result=result)
 
-    return render_template('index.html')
+    return render_template('landing.html')
+
+
+@app.route('/workspace', methods=['GET', 'POST'])
+def workspace():
+    """Render the text analysis workspace and process submitted text."""
+    if request.method == 'POST':
+        text = request.form.get('text', '')
+        result = predict_text(text)
+        return render_template('workspace.html', text=text, result=result)
+
+    return render_template('workspace.html', text='', result=None)
+
+
+@app.route('/landing-image')
+def landing_image():
+    """Serve the existing landing-page photograph stored with the templates."""
+    return send_file(BASE_DIR / 'templates' / 'images' / 'landingPageImage.jpg',
+                     mimetype='image/jpeg')
 
 
 @app.route('/api/predict', methods=['POST'])

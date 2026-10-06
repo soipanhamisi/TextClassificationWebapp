@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f1f3eb" />
+  <title>Analyze writing — Textly</title>
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body class="workspace-page">
+  <header class="site-header workspace-header">
+    <a class="brand" href="{{ url_for('index') }}" aria-label="Textly home">
+      <span class="brand-mark" aria-hidden="true">✓</span>
+      <span class="brand-name">Textly</span>
+    </a>
+    <div class="privacy-note"><span>Your text stays private</span><span class="status-dot"></span></div>
+  </header>
+
+  <main class="workspace-main">
+    <div class="workspace-intro">
+      <span class="eyebrow">Workspace</span>
+      <h1>Analyze a piece of writing</h1>
+      <p>For a more reliable signal, use at least 100 words.</p>
+    </div>
+
+    <section class="analysis-card" aria-label="Text analysis workspace">
+      <form class="editor-panel" method="POST" action="{{ url_for('workspace') }}" id="classifierForm">
+        <div class="editor-heading">
+          <label for="text">Your text</label>
+          <button class="text-button" type="button" id="clearText" {% if not text %}disabled{% endif %}>Clear</button>
+        </div>
+        <textarea id="text" name="text" placeholder="Paste your text here, or start typing..." aria-describedby="text-guidance" required>{{ text if text else '' }}</textarea>
+        <div class="editor-footer">
+          <div class="editor-meta">
+            <span id="wordCount" aria-live="polite">0 words</span>
+            <span aria-hidden="true">·</span>
+            <span id="characterCount">0 characters</span>
+          </div>
+          <button class="button button-primary submit-button" id="submitButton" type="submit" {% if not text %}disabled{% endif %}>
+            <span id="submitLabel">Check for AI</span><span aria-hidden="true">→</span>
+          </button>
+        </div>
+        <p class="visually-hidden" id="text-guidance">A sample of at least 100 words is recommended for a more reliable signal.</p>
+      </form>
+
+      <aside class="result-panel" aria-live="polite">
+        {% if result and result.success %}
+          {% set ai_score = result.probabilities.ai | round | int %}
+          <div class="result-content">
+            <span class="result-eyebrow">Confidence score</span>
+            <div class="score-ring" role="img" aria-label="{{ ai_score }} percent AI likelihood">
+              <svg class="score-ring-svg" viewBox="0 0 144 144" aria-hidden="true">
+                <circle class="score-ring-track" cx="72" cy="72" r="60" />
+                <circle class="score-ring-progress" cx="72" cy="72" r="60" style="stroke-dashoffset: {{ 376.99 * (1 - ai_score / 100) }}px" />
+              </svg>
+              <div class="score-center">
+                <strong>{{ ai_score }}%</strong>
+                <span>AI likely</span>
+              </div>
+            </div>
+            <h2>{% if result.prediction == "AI-Generated" %}Likely AI-generated{% else %}Likely human-written{% endif %}</h2>
+            <p class="result-explanation">This is a probability, not proof. Use the result as one signal alongside your own judgment.</p>
+            <div class="signal-card">
+              <span>Model classification</span>
+              <strong>{{ result.prediction }}</strong>
+            </div>
+            <div class="probability-list">
+              <div class="probability-row"><span>Human likelihood</span><strong>{{ result.probabilities.human }}%</strong></div>
+              <div class="probability-track"><span style="width: {{ result.probabilities.human }}%"></span></div>
+              <div class="probability-row"><span>AI likelihood</span><strong>{{ result.probabilities.ai }}%</strong></div>
+              <div class="probability-track probability-track-ai"><span style="width: {{ result.probabilities.ai }}%"></span></div>
+            </div>
+          </div>
+        {% elif result %}
+          <div class="empty-result error-result">
+            <span class="result-icon" aria-hidden="true">!</span>
+            <h2>We couldn't run the check</h2>
+            <p>{{ result.error }}</p>
+          </div>
+        {% else %}
+          <div class="empty-result">
+            <span class="result-icon" aria-hidden="true"><span class="mini-bars"><i></i><i></i><i></i></span></span>
+            <h2>Your result will appear here</h2>
+            <p>Add your text, then run the check to see an AI confidence score and key signal.</p>
+          </div>
+        {% endif %}
+      </aside>
+    </section>
+
+    <p class="disclaimer">Textly is an experimental hobby project. Detection tools can be wrong and should never be used as the sole basis for important decisions.</p>
+  </main>
+
+  <script>
+    const textInput = document.getElementById("text");
+    const wordCount = document.getElementById("wordCount");
+    const characterCount = document.getElementById("characterCount");
+    const clearButton = document.getElementById("clearText");
+    const submitButton = document.getElementById("submitButton");
+    const submitLabel = document.getElementById("submitLabel");
+    const classifierForm = document.getElementById("classifierForm");
+
+    function updateEditorState() {
+      const value = textInput.value;
+      const words = value.trim() ? value.trim().split(/\s+/).length : 0;
+      wordCount.textContent = `${words} ${words === 1 ? "word" : "words"}`;
+      characterCount.textContent = `${value.length} ${value.length === 1 ? "character" : "characters"}`;
+      clearButton.disabled = value.length === 0;
+      submitButton.disabled = value.trim().length === 0;
+    }
+
+    textInput.addEventListener("input", updateEditorState);
+    clearButton.addEventListener("click", () => {
+      textInput.value = "";
+      updateEditorState();
+      textInput.focus();
+    });
+    classifierForm.addEventListener("submit", () => {
+      submitButton.disabled = true;
+      submitLabel.textContent = "Checking...";
+    });
+    updateEditorState();
+  </script>
+</body>
+</html>
