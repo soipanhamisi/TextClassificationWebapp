@@ -1,9 +1,9 @@
-from flask import Flask, render_template, request, jsonify, send_file
-import joblib
 import re
-import os
-from pathlib import Path
 import warnings
+from pathlib import Path
+
+import joblib
+from flask import Flask, render_template, request, jsonify, send_file
 
 # Suppress scikit-learn version warnings
 warnings.filterwarnings('ignore', category=UserWarning)
