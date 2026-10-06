@@ -189,8 +189,8 @@ def workspace():
 
 @app.route('/landing-image')
 def landing_image():
-    """Serve the existing landing-page photograph stored with the templates."""
-    return send_file(BASE_DIR / 'templates' / 'images' / 'landingPageImage.jpg',
+    """Serve the landing-page illustration stored with the templates."""
+    return send_file(BASE_DIR / 'templates' / 'images' / 'landingIllustration.jpg',
                      mimetype='image/jpeg')
 
 
