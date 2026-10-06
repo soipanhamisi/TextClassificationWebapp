@@ -11,6 +11,7 @@ RUN pip install --no-cache-dir --upgrade pip \
 
 COPY app.py .
 COPY templates ./templates
+COPY static ./static
 COPY TextClassificationWebapp/ml_assets ./TextClassificationWebapp/ml_assets
 
 EXPOSE 5000
