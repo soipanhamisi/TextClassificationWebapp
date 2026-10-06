@@ -72,8 +72,8 @@ button, textarea { font: inherit; }
 .button-primary:hover:not(:disabled) { background: #294334; box-shadow: 0 14px 30px #1c2c2426; }
 .button:disabled { background: #929a94; box-shadow: none; cursor: not-allowed; }
 .hero {
-  min-height: 765px;
-  padding-top: 95px;
+  min-height: 700px;
+  padding-top: 5px;
   padding-bottom: 90px;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -156,7 +156,7 @@ button, textarea { font: inherit; }
 .scan-status { padding: 10px 12px; display: inline-flex; align-items: center; gap: 8px; border-radius: 6px; background: var(--green-pale); color: #496750; font-size: 13px; font-weight: 700; white-space: nowrap; }
 .floating-note {
   position: absolute;
-  top: 1px;
+  top: 30px;
   right: -20px;
   padding: 18px 21px;
   display: flex;
