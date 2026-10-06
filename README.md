@@ -1,4 +1,7 @@
-## 📋 Table of Contents
+![Deployment status](https://img.shields.io/badge/Deployment-Deployed-brightgreen)
+![Project status](https://img.shields.io/badge/Status-In%20Testing%20%2F%20Improvement-yellow)
+
+## Table of Contents
 
 1. [Project Overview](#project-overview)
 2. [Features](#features)
@@ -16,16 +19,16 @@
 
 ---
 
-## 📖 Project Overview
+## Project Overview
 
 The **AI Essay Classifier** is a Flask-based web application that uses machine learning to classify text as either **AI-generated** or **human-written**. Built as an educational project, it demonstrates end-to-end ML workflow implementation with a modern web interface.
 
-### 🎯 Purpose
+### Purpose
 - **Primary**: Detect AI-generated vs human-written essays and text
 - **Educational**: Demonstrate ML pipeline integration in web applications
 - **Practical**: Provide both web UI and REST API for text classification
 
-### 🏗️ Tech Stack
+### Tech Stack
 | Layer | Technology | Version |
 |-------|------------|---------|
 | **Backend** | Flask | 3.0.0 |
@@ -38,35 +41,35 @@ The **AI Essay Classifier** is a Flask-based web application that uses machine l
 
 ---
 
-## ✨ Features
+## Features
 
-### 🌟 Core Features
-- ✅ **Text Classification**: AI-generated vs Human-written detection
-- ✅ **Confidence Scoring**: Percentage confidence in predictions
-- ✅ **Probability Breakdown**: Visual bars showing Human% vs AI%
-- ✅ **Material Design UI**: Modern, responsive interface
-- ✅ **REST API**: JSON endpoint for programmatic access
-- ✅ **Real-time Processing**: Instant results on form submission
+### Core Features
+- **Text Classification**: AI-generated vs Human-written detection
+- **Confidence Scoring**: Percentage confidence in predictions
+- **Probability Breakdown**: Visual bars showing Human% vs AI%
+- **Material Design UI**: Modern, responsive interface
+- **REST API**: JSON endpoint for programmatic access
+- **Real-time Processing**: Instant results on form submission
 
-### 🎨 UI/UX Features
-- ✅ **Responsive Design**: Mobile and desktop optimized
-- ✅ **Custom Color Palette**: Warm, professional theme
-- ✅ **Loading Animations**: Visual feedback during processing
-- ✅ **Auto-resize Textarea**: Expands with content
-- ✅ **Error Handling**: User-friendly error messages
-- ✅ **Accessibility**: ARIA labels and semantic HTML
+### UI/UX Features
+- **Responsive Design**: Mobile and desktop optimized
+- **Custom Color Palette**: Warm, professional theme
+- **Loading Animations**: Visual feedback during processing
+- **Auto-resize Textarea**: Expands with content
+- **Error Handling**: User-friendly error messages
+- **Accessibility**: ARIA labels and semantic HTML
 
-### 🤖 ML Features
-- ✅ **Multi-stage Pipeline**: TF-IDF → Scaling → PCA → Neural Network
-- ✅ **Text Preprocessing**: Consistent cleaning and normalization
-- ✅ **Feature Engineering**: N-gram extraction and dimensionality reduction
-- ✅ **Model Persistence**: Serialized models for fast loading
+### ML Features
+- **Multi-stage Pipeline**: TF-IDF → Scaling → PCA → Neural Network
+- **Text Preprocessing**: Consistent cleaning and normalization
+- **Feature Engineering**: N-gram extraction and dimensionality reduction
+- **Model Persistence**: Serialized models for fast loading
 
 ---
 
-## 🏛️ Architecture
+## Architecture
 
-### 📁 Project Structure
+### Project Structure
 ```
 TextClassificationWebapp/
 ├── app.py                          # Main Flask application
@@ -84,7 +87,7 @@ TextClassificationWebapp/
 └── .gitignore                     # Git ignore rules
 ```
 
-### 🔄 Application Flow
+### Application Flow
 ```mermaid
 graph TD
     A[User Input] --> B{Route?}
@@ -106,7 +109,7 @@ graph TD
     M -->|API| O[Return JSON]
 ```
 
-### 🧠 ML Pipeline Architecture
+### ML Pipeline Architecture
 ```
 Raw Text Input
     ↓
@@ -125,7 +128,7 @@ Prediction + Confidence Scores
 
 ---
 
-## 🚀 Installation & Setup
+## Installation & Setup
 
 ### Prerequisites
 - **Python**: 3.8 or higher
@@ -172,7 +175,7 @@ python app.py
 
 The application starts on `http://localhost:5000`
 
-### 🔧 Configuration Options
+### Configuration Options
 ```python
 # In app.py, modify these settings:
 app.run(
@@ -184,9 +187,9 @@ app.run(
 
 ---
 
-## 📖 Usage Guide
+## Usage Guide
 
-### 🌐 Web Interface
+### Web Interface
 
 #### Accessing the Application
 1. Open browser and navigate to `http://localhost:5000`
